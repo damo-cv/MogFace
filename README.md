@@ -1,12 +1,6 @@
 
 # MogFace: Towards a Deeper Appreciation on Face Detection
 
-## Top News
-
-**`2021.11`** We released a pytorch-vesion MogFace training and inference code.
-
-**`2021.03`** We achieved **Rand-1st** across all testing scenarios  on [WIDER FACE](http://shuoyang1213.me/WIDERFACE/WiderFace_Results.html).
-
 ## Introduction
 - In this repo, we propose a promising face detector, termed as MogFace. 
 
@@ -98,13 +92,3 @@ The best MogFace model and some tricks will be released soon.
   2. mkdir -p snapshots/MogFace-E && mv model_140000.pth snapshots/MogFace-E/
   3. CUDA_VISIBLE_DEVICES=0 python test_multi.py -c configs/mogface/MogFace-E.yml -n 140
 
-## References
-
-```
-@article{liu2021mogface,
-      title={MogFace: Rethinking Scale Augmentation on the Face Detector},
-        author={Liu, Yang and Wang, Fei and Sun, Baigui and Li, Hao},
-          journal={arXiv preprint arXiv:2103.11139},
-            year={2021}
-            }
-```
