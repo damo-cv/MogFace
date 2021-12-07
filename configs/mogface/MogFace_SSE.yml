@@ -1,0 +1,111 @@
+seed: 0
+max_iterations: 70000
+log_smooth_window: 10
+snapshot_iter: 5000
+eval_iter_list: [70000]
+
+architecture: WiderFaceBaseNet
+pretrain_weights: ./pretrain_weights/resnet50-19c8e357.pth
+weight_init_fn: NormalWeightInit
+num_classes: 1
+
+optimizer: SGDOptimizer
+warmup_strategy: LinearWarmup
+lr: 0.004
+
+criterion: Criterion
+
+train_feed: TrainFeed
+validation_set: WiderFaceValSet
+generate_anchors_fn: GeneartePriorBoxes
+preprocess_fn: BasePreprocess
+
+WiderFaceBaseNet:
+  backbone: ResNet
+  fpn: LFPN
+  pred_net: RetinaPredNet
+
+ResNet:
+  depth: 50
+
+LFPN:
+  c2_out_ch: 256
+  c3_out_ch: 512
+  c4_out_ch: 1024
+  c5_out_ch: 2048
+  c6_mid_ch: 512
+  c6_out_ch: 512
+  c7_mid_ch: 128
+  c7_out_ch: 256
+
+RetinaPredNet:
+  num_anchor_per_pixel: 1
+  input_ch_list: [256, 256, 256, 256, 256, 256]
+  retina_cls_weight_init_fn: RetinaClsWeightInit
+
+Criterion:
+  cls_loss_weight: 1
+  loc_loss_weight: 2
+  cls_loss_fn: FocalLoss
+  loc_loss_fn: SmoothL1Loss
+
+FocalLoss:
+  alpha: 0.25
+  gamma: 2.0
+
+SmoothL1Loss:
+  sigma: 3
+
+TrainFeed:
+  dataset: WiderFaceTrainSet
+
+WiderFaceTrainSet:
+  anchor_target_fn: AnchorTarget
+  data_aug_settings: DataAugSettings
+
+
+BasePreprocess:
+  data_aug_settings: DataAugSettings
+  normalize_pixel: True
+  use_rgb: True
+  img_mean: [0.485, 0.456, 0.406]
+  img_std: [0.229, 0.224, 0.225]
+
+DataAugSettings: 
+  p2_scale_range: [8.4, 26.7]
+  p3_scale_range: [26.7, 54]
+  p4_scale_range: [54, 106.2]
+  p5_scale_range: [106.2, 212.4]
+  p6_scale_range: [212.4, 420.8]
+  p7_scale_range: [420.8, 640]
+  main_pyramid_layer: p5
+  auxiliary_pyramid_layer: p6
+  mpl_scale_ratio: 0.2
+  apl_scale_ratio: 0.16 # (1 - 0.2) * 0.2
+  resize_height: 640
+  resize_width: 640 
+  use_sse: True
+  use_mst: True
+
+AnchorTarget:
+  rpn_positive_overlap: 0.35
+  rpn_negative_overlap: 0.35
+  gt_match_maxoverlap_anchor: True
+  nomalized_compute_overlap: False
+
+GeneartePriorBoxes:
+  scale_list: [1]
+  aspect_ratio_list: [1.0]
+  stride_list: [4,8,16,32,64,128]
+  anchor_size_list: [16,32,64,128,256,512]
+
+SGDOptimizer:
+  momentum: 0.9
+  weight_decay: 1e-4
+
+LinearWarmup:
+  #lr: 0.001
+  warm_up_iter: 3000 
+  step_list: [50000, 70000, 160000]
+  ini_lr: 1e-6
+  gamma: 0.1

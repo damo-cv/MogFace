@@ -1,0 +1,11 @@
+numpy
+torch==1.5.0
+opencv-python
+pyyaml
+scipy
+torchvision==0.6.0
+tensorboardX
+six
+tqdm
+Cython
+
