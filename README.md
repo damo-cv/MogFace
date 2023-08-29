@@ -4,7 +4,6 @@
 ```
 git clone git@github.com:veesion-io/MogFace.git
 cd MogFace
-git checkout video_inference
 nvidia-docker run --gpus all --name blurring --security-opt seccomp=unconfined \
   --net=host --ipc=host -v /dev/shm:/dev/shm --ulimit memlock=-1 \
   -v /path/to/MogFace:/workspace/ -v /path/to/your/videos:/workspace/videos/ \
