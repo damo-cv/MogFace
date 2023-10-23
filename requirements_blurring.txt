@@ -1,0 +1,6 @@
+boto3
+ffprobe3
+pandas
+opencv-python==4.8.0.74
+numpy
+tqdm

@@ -33,3 +33,19 @@ Use the created files to create videos with faces blurred :
 ```
 python3 blur_detected_faces.py
 ```
+
+# Docker
+
+## annotation api
+
+Run annotation API:
+
+```bash
+ docker run -it --rm -p 8000:8000 --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 --name mogface -d 097234065497.dkr.ecr.eu-west-1.amazonaws.com/mogface uvicorn --host 0.0.0.0 annotation_api:app
+```
+
+## Send request to API
+
+```bash
+curl -l -X POST "localhost:8000/cloud" -H "Content-Type: application/json" -d '{"bucket_name": "veesion-test-blurring", "video_key": "a2pas-alma/2020-11-03_16h58m38s_to_2020-11-03_16h58m55s_camera_9_ip_192.168.1.108_port_37777.mp4"}'
+```

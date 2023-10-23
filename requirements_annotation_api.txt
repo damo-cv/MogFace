@@ -6,7 +6,6 @@ scipy
 torchvision
 tensorboardX
 six
-tqdm
 Cython
 fastapi
 uvicorn
